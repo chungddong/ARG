@@ -17,7 +17,7 @@
     <h1>
       <%= message %>
     </h1>
-    <p>이 페이지는 Express와 EJS로 렌더링되었습니다.</p>
+    <p>목포대학교 컴퓨터공학과 3학년 서충만</p>
 
   </header>
   <main>
@@ -55,8 +55,19 @@
       <div class="BoxTitle">출처 표기 스타일</div>
 
       <div class="StyleBox">
+        <input type="radio" id="apa" name="citationStyle" value="APA" />
+        <label for="apa">APA</label>
 
+        <input type="radio" id="chicago" name="citationStyle" value="Chicago" checked />
+        <label for="chicago">Chicago</label>
+
+        <input type="radio" id="mla" name="citationStyle" value="MLA" />
+        <label for="mla">MLA</label>
+
+        <input type="radio" id="vancouver" name="citationStyle" value="Vancouver" />
+        <label for="vancouver">Vancouver</label>
       </div>
+
 
       <div class="BoxTitle">생성 예시</div>
 
@@ -71,6 +82,8 @@
 
 
       </div>
+
+      
 
       <div class="BtnBox">
 
