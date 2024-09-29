@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 출처 생성기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .upload-area, .citation-area {
+            flex: 1;
+        }
+
+        .upload-area .upload-box {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .added-list ul {
+            list-style: none;
+        }
+
+        .added-list li {
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-btn {
+            background-color: transparent;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .citation-style {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .style-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .style-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .citation-example {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .generate-btn {
+            padding: 10px 30px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+
+            .upload-area, .citation-area {
+                width: 100%;
+            }
+
+            .style-buttons {
+                flex-direction: column;
+            }
+
+            .style-btn {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI 출처 생성기</h1>
+        </header>
+
+        <div class="content">
+            <section class="upload-area">
+                <div class="upload-box">
+                    <div class="upload-icon">
+                        <span>+</span>
+                    </div>
+                    <p>파일 또는 링크를 드래그 앤 드롭</p>
+                </div>
+                <div class="added-list">
+                    <ul>
+                        <li>
+                            <span>https://testNews.or.kr/news/test?id=23415125</span>
+                            <button class="remove-btn">X</button>
+                        </li>
+                        <li>
+                            <span>Accelerating Model Training in Multi-cluster Envi...</span>
+                            <button class="remove-btn">X</button>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="citation-area">
+                <div class="citation-style">
+                    <p>출처 표기 스타일</p>
+                    <div class="style-buttons">
+                        <button class="style-btn">APA</button>
+                        <button class="style-btn selected">Chicago</button>
+                        <button class="style-btn">MLA</button>
+                        <button class="style-btn">Vancouver</button>
+                    </div>
+                </div>
+                <div class="citation-example">
+                    <p>예시</p>
+                    <p>김영하, 나는 나를 파괴할 권리가 있다 (서울: 문학동네, 1996), 120.</p>
+                    <p>Ernest Miller Hemingway, <i>The Old Man and the Sea</i> (NY: Charles Scribner's Sons, 1952), 120.</p>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <button class="generate-btn">생성</button>
+        </footer>
+    </div>
+</body>
+</html>
