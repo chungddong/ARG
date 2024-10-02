@@ -11,149 +11,121 @@
 </head>
 
 <body>
-
   <header>
-
     <h1>
       <%= message %>
     </h1>
     <p>.....</p>
-
   </header>
   <main>
-
     <div class="FirstSection">
-
       <div class="DropBox">
-
-        <div class="DropBoxIcon">
-
-        </div>
-
-        <div class="DropBoxText">
-
-          파일 또는 링크를 드래그 앤 드롭하세요.
-
-        </div>
-
-
-
+        <div class="DropBoxIcon"></div>
+        <div class="DropBoxText">파일 또는 링크를 드래그 앤 드롭하세요.</div>
       </div>
-
       <div class="BoxTitle">추가된 목록</div>
-
-      <div class="DropListBox">
-
-
-      </div>
-
-
+      <div class="DropListBox"></div>
     </div>
 
     <div class="SecondSection">
-
       <div class="BoxTitle">출처 표기 스타일</div>
-
       <div class="StyleBox">
         <input type="radio" id="apa" name="citationStyle" value="APA" />
         <label for="apa">APA</label>
-
         <input type="radio" id="chicago" name="citationStyle" value="Chicago" checked />
         <label for="chicago">Chicago</label>
-
         <input type="radio" id="mla" name="citationStyle" value="MLA" />
         <label for="mla">MLA</label>
-
         <input type="radio" id="vancouver" name="citationStyle" value="Vancouver" />
         <label for="vancouver">Vancouver</label>
       </div>
-
-
       <div class="BoxTitle">생성 예시</div>
-
-      <div class="ExBox">
-
-      </div>
-
+      <div class="ExBox"></div>
       <div class="BoxTitle">세부 설정</div>
-
-      <div class="SetBox">
-
-
-
-      </div>
-
-
-
+      <div class="SetBox"></div>
       <div class="BtnBox">
-
-        <button>생성</button>
-
+        <button id="generateButton">생성</button>
       </div>
-
-
     </div>
-
-
   </main>
-  <footer>
+  <footer></footer>
 
-  </footer>
+  <script>
+    document.addEventListener('paste', (event) => {
+      const pastedData = event.clipboardData.getData('text');
+      if (pastedData.startsWith('http://') || pastedData.startsWith('https://')) {
+        const newItem = document.createElement('div');
+        newItem.classList.add('list-item');
+        newItem.textContent = pastedData;
+        document.querySelector('.DropListBox').appendChild(newItem);
+      }
+    });
+
+    const dropBox = document.querySelector('.DropBox');
+    dropBox.addEventListener('dragenter', (event) => {
+      event.preventDefault();
+      dropBox.classList.add('active');
+    });
+
+    dropBox.addEventListener('dragover', (event) => {
+      event.preventDefault();
+    });
+
+    dropBox.addEventListener('dragleave', () => {
+      dropBox.classList.remove('active');
+    });
+
+    dropBox.addEventListener('drop', (event) => {
+      event.preventDefault();
+      dropBox.classList.remove('active');
+      const files = event.dataTransfer.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const newItem = document.createElement('div');
+        newItem.classList.add('list-item');
+        newItem.textContent = file.name;
+        document.querySelector('.DropListBox').appendChild(newItem);
+      }
+    });
+
+    // 생성 버튼 클릭 시 서버로 데이터 전송
+    document.getElementById('generateButton').addEventListener('click', () => {
+      const dropListBox = document.querySelector('.DropListBox');
+      const items = dropListBox.querySelectorAll('.list-item');
+      const links = [];
+      const files = [];
+
+      items.forEach(item => {
+        if (item.textContent.startsWith('http://') || item.textContent.startsWith('https://')) {
+          links.push(item.textContent);
+        } else {
+          files.push(item.textContent); // 파일 이름을 추가
+        }
+      });
+
+      // 선택된 출처 표기 스타일 가져오기
+      const citationStyle = document.querySelector('input[name="citationStyle"]:checked').value;
+      console.log(citationStyle);
+
+      // 데이터 전송을 위한 AJAX 요청
+      fetch('/api/citations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ links, files, citationStyle }), // citationStyle 추가
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('서버 응답:', data);
+          // 성공적으로 전송된 후 처리할 작업 추가
+        })
+        .catch((error) => {
+          console.error('전송 오류:', error);
+        });
+    });
+
+  </script>
 </body>
-
-<script>
-  document.addEventListener('paste', (event) => {
-    // 클립보드의 텍스트 데이터 가져오기
-    const pastedData = event.clipboardData.getData('text');
-
-    // 링크인지 확인 (http 또는 https로 시작하는지 확인)
-    if (pastedData.startsWith('http://') || pastedData.startsWith('https://')) {
-      // DropListBox에 추가할 새로운 요소 생성
-      const newItem = document.createElement('div');
-      newItem.classList.add('list-item'); // 아이템에 클래스 추가 (스타일을 위해)
-      newItem.textContent = pastedData;
-
-      // DropListBox에 추가
-      document.querySelector('.DropListBox').appendChild(newItem);
-    }
-  });
-
-
-  // DropBox 요소를 찾기
-  const dropBox = document.querySelector('.DropBox');
-
-  // DropBox에 파일 드래그 앤 드롭 이벤트 추가
-  dropBox.addEventListener('dragenter', (event) => {
-    event.preventDefault();  // 기본 동작 방지
-    dropBox.classList.add('active');  // 드래그 상태 시 CSS 효과를 추가할 수 있음
-  });
-
-  dropBox.addEventListener('dragover', (event) => {
-    event.preventDefault();  // 기본 동작 방지
-  });
-
-  dropBox.addEventListener('dragleave', () => {
-    dropBox.classList.remove('active');  // 드래그가 끝났을 때 CSS 효과 제거
-  });
-
-  dropBox.addEventListener('drop', (event) => {
-    event.preventDefault();  // 기본 동작 방지
-    dropBox.classList.remove('active');  // 드래그가 끝났을 때 CSS 효과 제거
-
-    // 드롭된 파일 목록 가져오기
-    const files = event.dataTransfer.files;
-
-    // 각 파일 이름을 DropListBox에 추가
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const newItem = document.createElement('div');
-      newItem.classList.add('list-item');
-      newItem.textContent = file.name;  // 파일 이름 설정
-
-      document.querySelector('.DropListBox').appendChild(newItem);
-    }
-  });
-</script>
-
 
 </html>
